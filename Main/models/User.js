@@ -1,7 +1,14 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
+const bcrypt = require('bcrypt'); // You may need this for password hashing
 
-class User extends Model {}
+class User extends Model {
+    // Optionally you can add instance method for password validation
+    // Example:
+    // checkPassword(loginPw) {
+    //    return bcrypt.compareSync(loginPw, this.password);
+    // }
+}
 
 User.init(
     {
@@ -9,31 +16,37 @@ User.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true,
+            autoIncrement: true
         },
+
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        
         username: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+            allowNull: false
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
-        }
+       
     },
     {
+        hooks: {
+            
+             beforeCreate: async (newUserData) => {
+                newUserData.password = await bcrypt.hash(newUserData.password, 10);
+                return newUserData;
+             },
+        },
         sequelize,
-        timestamps: true,
-        createdAt: 'created_at',
-        updatedAt: false,
-        freezeTableName: true,
-        underscored: true,
         modelName: 'user',
+        underscored: true,
+        freezeTableName: true,
+        timestamps: true
     }
 );
 
