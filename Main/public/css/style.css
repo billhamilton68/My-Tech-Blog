@@ -22,3 +22,45 @@ header, .project:not(:last-child) {
   font-weight: bold;
   margin-left: -5px;
 }
+li {
+  list-style: none;
+} 
+
+
+.nav-links ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  display: inline-block;
+  margin-right: 20px; 
+
+}
+
+.post {
+  margin: 1px;
+  padding: 5px;
+  list-style: none;
+  border: #065b83 2px solid;
+}
+
+.filter-category {
+  margin: 10px 0;
+}
+
+.like-btn {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.reply-form {
+  margin-top: 10px;
+}

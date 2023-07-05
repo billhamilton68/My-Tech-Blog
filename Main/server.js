@@ -9,6 +9,7 @@ const homeRoutes = require('./controllers/homeRoutes.js');
 const helpers = require('./utils/helpers');
 const models = require('./models');
 const flash = require('express-flash');
+const Handlebars = require('handlebars');
 //const flash = require('connect-flash');
 
 const sequelize = require('./config/connection');
@@ -16,6 +17,11 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 // Load environment variables
 require('dotenv').config();
+
+Handlebars.registerHelper('dateFormat', function(value) {
+    const date = new Date(value);
+    return date.toLocaleDateString();
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;

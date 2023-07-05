@@ -19,7 +19,11 @@ Post.init(
             type: DataTypes.TEXT,
             allowNull: false
         },
-        // Add additional fields if required
+        category: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        
     },
     {
         sequelize,

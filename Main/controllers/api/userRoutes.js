@@ -70,7 +70,7 @@ router.put('/profile', withAuth, async (req, res) => {
   try {
       const { name, email } = req.body;
       
-      // Additional input validation here...
+      
 
       await User.update({ name, email }, {
           where: {

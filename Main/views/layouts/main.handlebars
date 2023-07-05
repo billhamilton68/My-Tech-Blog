@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperTech Blog</title>
-     <link rel="stylesheet" href="/css/jass.css">
+    <title>My Tech Blog</title>
+    <link rel="stylesheet" href="/css/jass.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -14,10 +14,19 @@
         <header class="display-flex justify-space-between align-center p-2">
             <h1>
                 <span role="img" aria-label="blog">📝</span>
-                <a href="/">SuperTech Blog</a>
+                <a href="/">My Tech Blog</a>
             </h1>
+
+            <nav class="nav-links">
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="home"><a href="/">Home</a></li>
+                    <li id="Posts"><a href="/posts">Post Something</a></li>
+                    <li id="contact"><a href="/contact">Contact Us</a></li>
+                </ul>
+            </nav>
+
             <nav>
-                <!-- Conditionally render login or logout links -->
+                
                 {{#if logged_in}}
                 <a href="/profile">profile</a> |
                 <button class="no-button" id="logout">logout</button>
@@ -27,18 +36,20 @@
             </nav>
         </header>
         <main class="container container-fluid mt-5">
-            <!-- Render the sub layout -->
+     
             {{{ body }}}
         </main>
         <footer>
-            
+
         </footer>
     </div>
 
-    <!-- Render script for logged in users only -->
+   
     {{#if logged_in}}
     <script src="/js/logout.js"></script>
     {{/if}}
+
+     <script src="/js/main.js"></script>
 </body>
 
 </html>

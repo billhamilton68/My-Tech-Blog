@@ -1,0 +1,72 @@
+<div class="container">
+    <h1>All Posts</h1>
+
+   
+    {{#if logged_in}}
+    <div class="new-post">
+        <h2>Create a New Post</h2>
+        <form class="form new-post-form" action="/api/posts" method="POST">
+            <div class="form-group">
+                <label for="post-title">Title:</label>
+                <input class="form-input" type="text" id="post-title" name="title" required />
+            </div>
+            <div class="form-group">
+                <label for="post-category">Category:</label>
+                <select class="form-input" id="post-category" name="category">
+                    <option value="Coding">Coding</option>
+                    <option value="Software Language">Software Language</option>
+                    <option value="Hardware">Hardware</option>
+                    <option value="Network">Network</option>
+                    <option value="Software">Software</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="post-content">Content:</label>
+                <textarea class="form-input" id="post-content" name="content" required></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Submit Post</button>
+            </div>
+        </form>
+    </div>
+    {{/if}}
+
+    <!-- Filter posts by category -->
+    <div class="filter-category">
+        <label for="filter-category">Filter by Category:</label>
+        <select class="form-input" id="filter-category" onchange="filterPostsByCategory(this.value)">
+            <option value="">All</option>
+            <option value="Coding">Coding</option>
+            <option value="Software Language">Software Language</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Network">Network</option>
+            <option value="Software">Software</option>
+        </select>
+    </div>
+
+    <!-- List of posts -->
+    <ul class="posts-list">
+        {{#each posts}}
+            <li class="post" data-category="{{this.category}}">
+                <h2>{{this.title}}</h2>
+                <p>{{this.content}}</p>
+                <p>Posted by: {{this.username}}</p>
+                <p>Category: {{this.category}}</p>
+                <p>Date: {{dateFormat this.createdAt}}</p>
+                <!-- Like button -->
+                <button class="like-btn" data-post-id="{{this.id}}">Like</button>
+                <!-- Reply form -->
+                {{#if logged_in}}
+                <form class="reply-form" action="/api/comments" method="POST">
+                    <input type="hidden" name="post_id" value="{{this.id}}">
+                    <textarea name="content" placeholder="Your reply..."></textarea>
+                    <button type="submit">Reply</button>
+                </form>
+                {{/if}}
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+
+<script src="/js/posts.js"></script>
