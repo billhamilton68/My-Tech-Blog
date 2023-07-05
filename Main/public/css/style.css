@@ -64,3 +64,29 @@ li {
 .reply-form {
   margin-top: 10px;
 }
+
+*.error-message {
+  color: red;
+  background-color: #fdd;
+  border: 1px solid red;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.user-info {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.user-info div {
+  margin-bottom: 10px;
+}

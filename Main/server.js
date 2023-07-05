@@ -1,5 +1,3 @@
-// Main\server.js
-
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
@@ -7,10 +5,9 @@ const exphbs = require('express-handlebars');
 const routes = require('./controllers');
 const homeRoutes = require('./controllers/homeRoutes.js');
 const helpers = require('./utils/helpers');
-const models = require('./models');
+const models = require('./models'); // Explicitly requiring the models
 const flash = require('express-flash');
 const Handlebars = require('handlebars');
-//const flash = require('connect-flash');
 
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -41,20 +38,13 @@ const sess = {
 
 // Use secure cookies in production
 if (process.env.NODE_ENV === 'production') {
-    app.set('trust proxy', 1); // trust first proxy
-    sess.cookie.secure = true; // serve secure cookies
+    app.set('trust proxy', 1); 
+    sess.cookie.secure = true; 
 }
 
 app.use(session(sess));
-//app.use(session({
-//  secret: 'your_secret_key',
- // resave: false,
-  //saveUninitialized: false
-//}));
-
 app.use(flash());
 
-// Inform Express.js on which template engine to use
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
@@ -64,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRoutes);
 app.use(routes);
 
+// Sync models with the database and start the server
 sequelize.sync({ force: false }).then(() => {
     app.listen(PORT, () => console.log(`Now listening on port ${PORT}`));
 });

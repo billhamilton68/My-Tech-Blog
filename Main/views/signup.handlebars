@@ -2,6 +2,12 @@
     <div class="col-md-6">
        <h2>Sign UP!!!</h2>
 
+       {{#if errorMessage}}
+        <div class="error-message" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
+
         <form class="form signup-form" action="/signup" method="POST">
             <div class="form-group">
                 <label for="username-signup">Username:</label>

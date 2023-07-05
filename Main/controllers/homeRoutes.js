@@ -46,7 +46,7 @@ router.get('/post/:id', async (req, res) => {
     }
 });
 
-router.get('/posts', async (req, res) => {
+router.get('/posts', withAuth, async (req, res) => {
     try {
         const postData = await Post.findAll({
             include: [
@@ -66,7 +66,7 @@ router.get('/posts', async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
-});
+}); 
 
 router.post('/api/posts', async (req, res) => {
     try {
@@ -86,21 +86,31 @@ router.post('/api/posts', async (req, res) => {
 router.get('/profile', withAuth, async (req, res) => {
     try {
         const userData = await User.findByPk(req.session.user_id, {
-            attributes: { exclude: ['password'] },
-            include: [{ model: Post }],
+            attributes: ['username', 'email', 'created_at']
         });
+
+        if (!userData) {
+            return res.status(404).json({ message: 'No user found with this id!' });
+        }
 
         const user = userData.get({ plain: true });
 
-        res.render('homepage', {
+        // Mock values for posts_count and likes_count for now
+        const posts_count = 0;
+        const likes_count = 0;
+
+        res.render('profile', {
             ...user,
+            posts_count,
+            likes_count,
             logged_in: true
         });
+
     } catch (err) {
+        console.log(err);
         res.status(500).json(err);
     }
 });
-
 router.get('/login', (req, res) => {
     if (req.session.logged_in) {
         res.redirect('/');
@@ -119,6 +129,38 @@ router.get('/signup', (req, res) => {
     const errorMessage = req.flash('errorMessage');
     res.render('signup', { errorMessage });
 });
+
+/*router.post('/signup', async (req, res) => {
+    try {
+        const existingUser = await User.findOne({ where: { email: req.body.email } });
+
+        if (existingUser) {
+            req.flash('errorMessage', 'The user/email already exists');
+            res.redirect('/signup');
+        } else if (req.body.password.length < 8) {
+            req.flash('errorMessage', 'Password should be at least 8 characters');
+            res.redirect('/signup');
+        } else {
+            const userData = await User.create(req.body);
+            req.session.save(() => {
+              req.session.user_id = userData.id;
+              req.session.logged_in = true;
+
+              res.redirect('/login');
+          });
+      }
+  } catch (err) {
+      if (err.name === 'SequelizeValidationError') {
+          req.flash('errorMessage', 'Validation error occurred. Please ensure that all fields meet requirements.');
+      } else {
+          console.log(err);
+          res.status(500).json(err);
+      }
+      res.redirect('/signup');
+  }
+});
+
+module.exports = router;*/
 
 router.post('/signup', async (req, res) => {
     try {
