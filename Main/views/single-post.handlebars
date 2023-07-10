@@ -29,27 +29,29 @@
 
 <script>
     function likePost(postId) {
-        fetch(`/api/posts/like`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ postId }),
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Something went wrong while liking the post");
-            }
-            // Refresh the page after a successful like action
-            location.reload();
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    }
-
-    function showReplyForm(postId) {
-        const replyForm = document.querySelector(`#reply-form-${postId}`);
-        replyForm.classList.toggle('hidden');
-    }
+    fetch(`/api/posts/like`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Something went wrong while liking the post");
+        }
+        // add the thumbs up symbol
+        const likeCountSpan = document.querySelector(`#like-count-${postId}`);
+        const likeIcon = document.createElement('span');
+        likeIcon.classList.add('like-icon');
+        likeIcon.textContent = '👍';
+        likeCountSpan.after(likeIcon);
+        // increment like count
+        const currentCount = parseInt(likeCountSpan.textContent, 10);
+        likeCountSpan.textContent = currentCount + 1;
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 </script>

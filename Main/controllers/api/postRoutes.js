@@ -22,18 +22,18 @@ router.post('/', withAuth, async (req, res) => {
 
 
 
-router.post('/like', async (req, res) => {
-  try {
+router.post('/like', withAuth, async (req, res) => {
+    try {
       const newLike = await Liked.create({
-          user_id: req.session.user_id,
-          post_id: req.body.postId
+        user_id: req.session.user_id,
+        post_id: req.body.postId
       });
       res.json(newLike);
-  } catch (err) {
+    } catch (err) {
       console.error(err);
       res.status(500).json(err);
-  }
-});
+    }
+  });
 
 router.post('/comments', async (req, res) => {
   try {

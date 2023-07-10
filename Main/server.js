@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', homeRoutes);
 app.use('/api/users', userRoutes); // add user routes
-app.use('/posts', postRoutes);
+app.use('/api/posts', postRoutes);
 
 // Sync models with the database and start the server
 sequelize.sync({ force: false }).then(() => {

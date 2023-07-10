@@ -74,7 +74,42 @@ router.get('/posts', withAuth, async (req, res) => {
     }
   });
 
-router.post('/api/comments', async (req, res) => {
+  router.get('/posts/:id', withAuth, async (req, res) => {
+    try {
+      const postData = await Post.findByPk(req.params.id, {
+        include: [
+          {
+            model: User,
+            attributes: ['username'],
+          },
+          {
+            model: User,
+            as: 'likers',
+            attributes: ['id'],
+            through: { attributes: [] },
+          }
+        ],
+      });
+  
+      if (!postData) {
+        res.status(404).json({ message: 'No post found with this id!' });
+        return;
+      }
+  
+      const post = postData.get({ plain: true });
+      post.userLiked = post.likers.some((liker) => liker.id === req.session.user_id);
+  
+      res.render('single-post', {
+        post,
+        logged_in: req.session.logged_in
+      });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+  
+
+router.post('/comments', async (req, res) => {
   try {
     const newComment = await Comment.create({
       content: req.body.content,
@@ -88,7 +123,7 @@ router.post('/api/comments', async (req, res) => {
   }
 });
 
-router.post('/api/posts', async (req, res) => {
+router.post('/posts', async (req, res) => {
   try {
     const newPost = await Post.create({
       title: req.body.title,

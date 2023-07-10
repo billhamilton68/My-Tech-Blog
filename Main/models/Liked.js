@@ -12,18 +12,16 @@ Liked.init(
             autoIncrement: true
         },
         user_id: {
-  type: DataTypes.INTEGER,
-  allowNull: false,
-  unique: true, 
-  references: {
-    model: 'User',
-    key: 'id',
-  },
-},
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'user',
+                key: 'id',
+            },
+        },
         post_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            unique: true,
             references: {
                 model: 'post',
                 key: 'id'
@@ -32,6 +30,12 @@ Liked.init(
     },
     {
         sequelize,
+        indexes: [
+            {
+                unique: true,
+                fields: ['user_id', 'post_id']
+            }
+        ],
         timestamps: false,
         freezeTableName: true,
         underscored: true,
