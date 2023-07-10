@@ -26,6 +26,15 @@ function likePost(postId) {
 
       // Update the like count
       likeCount.textContent = data.likeCount;
+
+      // Add thumbs-up symbol if it doesn't exist
+      const likeSymbol = document.querySelector(`span[data-post-id="${postId}"]`);
+      if (!likeSymbol) {
+        const newLikeSymbol = document.createElement('span');
+        newLikeSymbol.setAttribute('data-post-id', postId);
+        newLikeSymbol.textContent = '👍';
+        likeButton.after(newLikeSymbol);
+      }
     })
     .catch((error) => {
       console.error('Error:', error);
