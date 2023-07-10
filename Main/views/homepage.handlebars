@@ -22,9 +22,11 @@
             <!-- Reply form -->
             {{#if ../logged_in}}
             <div class="reply-form">
-                <form action="/api/comments" method="POST">
+                <div class="reply-form">
+                <form id="reply-form-{{post.id}}" action="/api/comments" method="POST">
                     <input type="hidden" name="post_id" value="{{post.id}}">
                     <textarea name="content" placeholder="Thoughts?..."></textarea>
+                    <button type="submit">Submit</button>
                 </form>
             </div>
             {{/if}}
@@ -36,7 +38,7 @@
                 {{#if post.userLiked}}
                     <span>👍</span>
                 {{/if}}
-                <button class="reply-btn" type="submit">Reply</button>
+                <button class="reply-btn" type="submit">Comment</button>
                 {{/if}}
             </div>
         </div>

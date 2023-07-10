@@ -109,7 +109,7 @@ router.get('/posts', withAuth, async (req, res) => {
   });
   
 
-router.post('/comments', async (req, res) => {
+router.post('/api/comments', async (req, res) => {
   try {
     const newComment = await Comment.create({
       content: req.body.content,
