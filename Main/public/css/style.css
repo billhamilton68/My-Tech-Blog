@@ -90,3 +90,41 @@ li {
 .user-info div {
   margin-bottom: 10px;
 }
+
+.post-text{
+  margin: 10px 0;
+  text-align: justify;
+  border: 1px solid #065b83;
+  color: #1b89bc;
+}
+
+p{
+  color: #0f49a7;
+}
+
+.title-text{
+  color: #1b89bc;
+}
+
+.reply-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.reply-form textarea {
+  margin-bottom: 10px;
+}
+
+.buttons-container {
+  display: flex;
+    align-items: center;  /* This will vertically center align the buttons */
+  flex-direction: row;  /* This will make the buttons line up in a row */
+}
+
+.like-btn, .reply-btn {
+  margin: 0 10px;  /* This adds 10px of horizontal space on the left and right side of each button */
+}
+span.like-icon {
+  font-size: 1.2rem;
+}
+

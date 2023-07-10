@@ -1,195 +1,173 @@
 const router = require('express').Router();
-const { Post, User } = require('../models');
+const { Post, User, Liked, Session, Comment } = require('../models');
 const withAuth = require('../utils/auth');
+const { format } = require('date-fns');
 
 router.get('/', async (req, res) => {
-    try {
-        const postData = await Post.findAll({
-            include: [
-                {
-                    model: User,
-                    attributes: ['username'],
-                },
-            ],
-        });
+  try {
+    const postData = await Post.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['username'],
+        },
+        {
+          model: User,
+          as: 'likers',
+          attributes: ['id'],
+          through: { attributes: [] },
+        },
+      ],
+    });
 
-        const posts = postData.map((post) => post.get({ plain: true }));
+    const posts = postData.map((post) => {
+      const plainPost = post.get({ plain: true });
+      plainPost.userLiked = plainPost.likers.some((liker) => liker.id === req.session.user_id);
+      return plainPost;
+    });
 
-        res.render('homepage', {
-            posts,
-            logged_in: req.session.logged_in
-        });
-    } catch (err) {
-        res.status(500).json(err);
-    }
+    console.log('Logged in status:', req.session.logged_in);
+
+    res.render('homepage', {
+      posts,
+      logged_in: req.session.logged_in,
+      username: req.session.username,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
-router.get('/post/:id', async (req, res) => {
-    try {
-        const postData = await Post.findByPk(req.params.id, {
-            include: [
-                {
-                    model: User,
-                    attributes: ['username'],
-                },
-            ],
-        });
-
-        const post = postData.get({ plain: true });
-
-        res.render('post', {
-            ...post,
-            logged_in: req.session.logged_in
-        });
-    } catch (err) {
-        res.status(500).json(err);
-    }
+router.get('/contact', (req, res) => {
+  res.render('contact', {
+    logged_in: req.session.logged_in,
+    username: req.session.username,
+  });
 });
 
 router.get('/posts', withAuth, async (req, res) => {
     try {
-        const postData = await Post.findAll({
-            include: [
-                {
-                    model: User,
-                    attributes: ['username'],
-                },
-            ],
-        });
-
-        const posts = postData.map((post) => post.get({ plain: true }));
-
-        res.render('posts', {
-            posts,
-            logged_in: req.session.logged_in
-        });
+      const sessionData = await Session.findOne({ where: { sid: req.sessionID } });
+      const sessionUserId = sessionData ? sessionData.dataValues.user_id : null;
+  
+      const postData = await Post.findAll({
+        where: {
+          user_id: sessionUserId
+        },
+        include: [
+          {
+            model: User,
+            attributes: ['username'],
+          }
+        ]
+      });
+  
+      const posts = postData.map((post) => post.get({ plain: true }));
+  
+      res.render('posts', { 
+        posts,
+        logged_in: req.session.logged_in,
+        username: req.session.username
+      });
     } catch (err) {
-        res.status(500).json(err);
+      console.error(err);
+      res.status(500).json(err);
     }
-}); 
+  });
+
+router.post('/api/comments', async (req, res) => {
+  try {
+    const newComment = await Comment.create({
+      content: req.body.content,
+      user_id: req.session.user_id,
+      post_id: req.body.post_id,
+    });
+    res.redirect('/');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
 
 router.post('/api/posts', async (req, res) => {
-    try {
-        const newPost = await Post.create({
-            title: req.body.title,
-            content: req.body.content,
-            category: req.body.category,
-            user_id: req.session.user_id,
-        });
+  try {
+    const newPost = await Post.create({
+      title: req.body.title,
+      content: req.body.content,
+      category: req.body.category,
+      user_id: req.session.user_id,
+    });
 
-        res.redirect('/posts');
-    } catch (err) {
-        res.status(500).json(err);
-    }
+    res.redirect('/posts');
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.get('/profile', withAuth, async (req, res) => {
-    try {
-        const userData = await User.findByPk(req.session.user_id, {
-            attributes: ['username', 'email', 'created_at']
-        });
+  try {
+    const userData = await User.findOne({
+      where: { id: req.session.user_id },
+      include: [
+        {
+          model: Post,
+          include: [
+            {
+              model: Liked,
+              attributes: ['id'],
+            },
+          ],
+        },
+      ],
+    });
 
-        if (!userData) {
-            return res.status(404).json({ message: 'No user found with this id!' });
-        }
-
-        const user = userData.get({ plain: true });
-
-        // Mock values for posts_count and likes_count for now
-        const posts_count = 0;
-        const likes_count = 0;
-
-        res.render('profile', {
-            ...user,
-            posts_count,
-            likes_count,
-            logged_in: true
-        });
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
+    if (!userData) {
+      return res.status(404).json({ message: 'User not found' });
     }
+
+    const user = userData.get({ plain: true });
+
+    let totalLikes = 0;
+    user.posts.forEach((post) => {
+      totalLikes += post.likeds.length;
+    });
+
+    const formattedDate = format(new Date(user.createdAt), 'MMMM dd, yyyy');
+
+    const profileData = {
+      username: user.username,
+      email: user.email,
+      created_at: formattedDate,
+      posts_count: user.posts.length,
+      likes_count: totalLikes,
+      logged_in: req.session.logged_in,
+      username: req.session.username,
+    };
+
+    res.render('profile', profileData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
-router.get('/login', (req, res) => {
-    if (req.session.logged_in) {
-        res.redirect('/');
-        return;
-    }
 
-    res.render('login');
+router.get('/login', (req, res) => {
+  if (req.session.logged_in) {
+    res.redirect('/');
+    return;
+  }
+
+  res.render('login');
 });
 
 router.get('/signup', (req, res) => {
-    if (req.session.logged_in) {
-        res.redirect('/homepage');
-        return;
-    }
-
-    const errorMessage = req.flash('errorMessage');
-    res.render('signup', { errorMessage });
-});
-
-/*router.post('/signup', async (req, res) => {
-    try {
-        const existingUser = await User.findOne({ where: { email: req.body.email } });
-
-        if (existingUser) {
-            req.flash('errorMessage', 'The user/email already exists');
-            res.redirect('/signup');
-        } else if (req.body.password.length < 8) {
-            req.flash('errorMessage', 'Password should be at least 8 characters');
-            res.redirect('/signup');
-        } else {
-            const userData = await User.create(req.body);
-            req.session.save(() => {
-              req.session.user_id = userData.id;
-              req.session.logged_in = true;
-
-              res.redirect('/login');
-          });
-      }
-  } catch (err) {
-      if (err.name === 'SequelizeValidationError') {
-          req.flash('errorMessage', 'Validation error occurred. Please ensure that all fields meet requirements.');
-      } else {
-          console.log(err);
-          res.status(500).json(err);
-      }
-      res.redirect('/signup');
+  if (req.session.logged_in) {
+    res.redirect('/homepage');
+    return;
   }
-});
 
-module.exports = router;*/
-
-router.post('/signup', async (req, res) => {
-    try {
-        const existingUser = await User.findOne({ where: { email: req.body.email } });
-
-        if (existingUser) {
-            req.flash('errorMessage', 'The user/email already exists');
-            res.redirect('/signup');
-        } else if (req.body.password.length < 8) {
-            req.flash('errorMessage', 'Password should be at least 8 characters');
-            res.redirect('/signup');
-        } else {
-            const userData = await User.create(req.body);
-            req.session.save(() => {
-              req.session.user_id = userData.id;
-              req.session.logged_in = true;
-
-              res.redirect('/login');
-          });
-      }
-  } catch (err) {
-      if (err.name === 'SequelizeValidationError') {
-          req.flash('errorMessage', 'Validation error occurred. Please ensure that all fields meet requirements.');
-      } else {
-          console.log(err);
-          res.status(500).json(err);
-      }
-      res.redirect('/signup');
-  }
+  const errorMessage = req.flash('errorMessage');
+  res.render('signup', { errorMessage });
 });
 
 module.exports = router;

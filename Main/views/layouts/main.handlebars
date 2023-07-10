@@ -2,54 +2,52 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Tech Blog</title>
-    <link rel="stylesheet" href="/css/jass.css">
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Tech Blog</title>
+  <link rel="stylesheet" href="/css/jass.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-    <div class="flex-column justify-space-around">
-        <header class="display-flex justify-space-between align-center p-2">
-            <h1>
-                <span role="img" aria-label="blog">📝</span>
-                <a href="/">My Tech Blog</a>
-            </h1>
+  <div class="flex-column justify-space-around">
+    <header class="display-flex justify-space-between align-center p-2">
+      <h1>
+        <span role="img" aria-label="blog">📝</span>
+        <a href="/">My Tech Blog</a>
+      </h1>
 
-            <nav class="nav-links">
-                <ul class="nav navbar-nav navbar-right">
-                    <li id="home"><a href="/">Home</a></li>
-                    <li id="Posts"><a href="/posts">Post Something</a></li>
-                    <li id="contact"><a href="/contact">Contact Us</a></li>
-                </ul>
-            </nav>
+      <nav class="nav-links">
+        <ul class="nav navbar-nav navbar-right">
+          <li id="home"><a href="/">Home</a></li>
+          <li id="Posts"><a href="/posts">Post Something</a></li>
+          <li id="contact"><a href="/contact">Contact Us</a></li>
+        </ul>
+      </nav>
 
-            <nav>
-                
-                {{#if logged_in}}
-                <a href="/profile">profile</a> |
-                <button class="no-button" id="logout">logout</button>
-                {{else}}
-                <a href="/login">login</a>
-                {{/if}}
-            </nav>
-        </header>
-        <main class="container container-fluid mt-5">
-     
-            {{{ body }}}
-        </main>
-        <footer>
+      <nav>
+        {{#if logged_in}}
+        <span>{{username}}</span> |
+        <a href="/profile">Profile</a> |
+        <button class="no-button" id="logout">Logout</button>
+        {{else}}
+        <a href="/login">Login</a>
+        {{/if}}
+      </nav>
+    </header>
+    <main class="container container-fluid mt-5">
+      {{{ body }}}
+    </main>
+    <footer>
+    </footer>
+  </div>
 
-        </footer>
-    </div>
-
-   
-    {{#if logged_in}}
-    <script src="/js/logout.js"></script>
-    {{/if}}
-
-     <script src="/js/main.js"></script>
+  {{#if logged_in}}
+  <script src="/js/logout.js"></script>
+  {{/if}}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/like-button-handler.js"></script>
 </body>
 
 </html>

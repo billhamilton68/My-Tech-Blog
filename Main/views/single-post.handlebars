@@ -1,0 +1,55 @@
+<div class="single-post">
+    <h1>{{post.title}}</h1>
+    <p>Author: {{post.user.username}}</p>
+    <p>Posted on {{format_date post.createdAt}}</p>
+    <div class="post-content">
+        <p>{{post.content}}</p>
+    </div>
+    <br>
+    <div>
+        <a href="/">Back to Posts</a>
+    </div>
+
+    {{#if logged_in}}
+    <div class="buttons-container">
+        <button class="like-btn" data-post-id="{{post.id}}" onclick="likePost('{{post.id}}')">Like</button>
+        <span id="like-count-{{post.id}}">{{post.likes_count}}</span>
+        {{#if post.userLiked}}
+            <span class="like-icon">👍</span>
+        {{/if}}
+        <button class="reply-btn" onclick="showReplyForm('{{post.id}}')">Reply</button>
+    </div>
+    <form id="reply-form-{{post.id}}" class="reply-form hidden" action="/api/comments" method="POST">
+        <input type="hidden" name="post_id" value="{{post.id}}">
+        <textarea name="content" placeholder="Thoughts?..."></textarea>
+        <button type="submit">React</button>
+    </form>
+    {{/if}}
+</div>
+
+<script>
+    function likePost(postId) {
+        fetch(`/api/posts/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ postId }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Something went wrong while liking the post");
+            }
+            // Refresh the page after a successful like action
+            location.reload();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    function showReplyForm(postId) {
+        const replyForm = document.querySelector(`#reply-form-${postId}`);
+        replyForm.classList.toggle('hidden');
+    }
+</script>

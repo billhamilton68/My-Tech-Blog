@@ -1,6 +1,5 @@
 <div class="container">
-    <h1>All Posts</h1>
-
+    
    
     {{#if logged_in}}
     <div class="new-post">
@@ -43,7 +42,11 @@
             <option value="Software">Software</option>
         </select>
     </div>
-
+    <br>
+    <br>
+    <h2>My Posts</h2>
+     <br>
+    <br>
     <!-- List of posts -->
     <ul class="posts-list">
         {{#each posts}}
@@ -53,16 +56,8 @@
                 <p>Posted by: {{this.username}}</p>
                 <p>Category: {{this.category}}</p>
                 <p>Date: {{dateFormat this.createdAt}}</p>
-                <!-- Like button -->
-                <button class="like-btn" data-post-id="{{this.id}}">Like</button>
-                <!-- Reply form -->
-                {{#if logged_in}}
-                <form class="reply-form" action="/api/comments" method="POST">
-                    <input type="hidden" name="post_id" value="{{this.id}}">
-                    <textarea name="content" placeholder="Your reply..."></textarea>
-                    <button type="submit">Reply</button>
-                </form>
-                {{/if}}
+                <p>Total Likes: {{this.total_likes}}</p>
+                
             </li>
         {{/each}}
     </ul>
