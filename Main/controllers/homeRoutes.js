@@ -47,8 +47,7 @@ router.get('/contact', (req, res) => {
 
 router.get('/posts', withAuth, async (req, res) => {
     try {
-      const sessionData = await Session.findOne({ where: { sid: req.sessionID } });
-      const sessionUserId = sessionData ? sessionData.dataValues.user_id : null;
+        const sessionUserId = req.session.user_id;
   
       const postData = await Post.findAll({
         where: {

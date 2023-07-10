@@ -3,10 +3,11 @@ const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const homeRoutes = require('./controllers/homeRoutes.js');
+const userRoutes = require('./controllers/api/userRoutes'); // import user routes
+const postRoutes = require('./controllers/api/postRoutes.js');
 const helpers = require('./utils/helpers');
 const models = require('./models');
 const flash = require('connect-flash');
-const postRoutes = require('./controllers/api/postRoutes.js');
 const Handlebars = require('handlebars');
 
 const sequelize = require('./config/connection');
@@ -58,6 +59,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', homeRoutes);
+app.use('/api/users', userRoutes); // add user routes
 app.use('/posts', postRoutes);
 
 // Sync models with the database and start the server
