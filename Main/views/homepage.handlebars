@@ -1,49 +1,54 @@
-{{#each posts as |post|}}
-    <div class="row mb-4 post">
-        <div class="col-md-2">
-            <h2>Topic: </h2>
-            <h2 class="title-text">
-                {{post.title}}
-            </h2>
-            <p>Author: {{post.user.username}}</p>
-            <p>Posted on {{format_date post.createdAt}}</p>
-        </div>
-
-        <div class="col-md-10">
-            <div class="post-text">
-                <p>
-                    {{truncate post.content 100}}
-                    {{#if (gt post.content.length 100)}}
-                        <a href="/posts/{{post.id}}">Read More</a>
-                    {{/if}}
-                </p>
+<div id="posts-container">
+    {{#each posts as |post|}}
+        <div class="row mb-4 post">
+            <div class="col-md-2">
+                <h2>Topic: </h2>
+                <h2 class="title-text">
+                    {{post.title}}
+                </h2>
+                <p>Author: {{post.user.username}}</p>
+                <p>Posted on {{format_date post.createdAt}}</p>
             </div>
 
-            <!-- Reply form -->
-            {{#if ../logged_in}}
-            <div class="reply-form">
-                <div class="reply-form">
-                <form id="reply-form-{{post.id}}" action="/api/comments" method="POST">
-                    <input type="hidden" name="post_id" value="{{post.id}}">
-                    <textarea name="content" placeholder="Thoughts?..."></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
-            {{/if}}
+            <div class="col-md-10">
+                <div class="post-text">
+                    <p>
+                        {{#if ../logged_in}}
+                        {{truncate post.content 100}}
+                        {{#if (gt post.content.length 100)}}
+                            <a href="/posts/{{post.id}}">Read More</a>
+                        {{/if}}
+                        {{else}}
+                        {{post.content}}
+                        {{/if}}
+                    </p>
+                </div>
 
-            <div class="buttons-container">
+                <!-- Reply form -->
                 {{#if ../logged_in}}
-                <button class="like-btn" data-post-id="{{post.id}}" onclick="likePost('{{post.id}}')">Like</button>
-                <span id="like-count-{{post.id}}">{{post.likes_count}}</span>
-                {{#if post.userLiked}}
-                    <span>👍</span>
+                <div class="reply-form">
+                    <form id="reply-form-{{post.id}}" action="/api/comments" method="POST">
+                        <input type="hidden" name="post_id" value="{{post.id}}">
+                        <textarea name="content" placeholder="Thoughts?..."></textarea>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
                 {{/if}}
-                <button class="reply-btn" type="submit">Comment</button>
-                {{/if}}
+
+                <div class="buttons-container">
+                    {{#if ../logged_in}}
+                    <button class="like-btn" data-post-id="{{post.id}}" onclick="likePost('{{post.id}}')">Like</button>
+                    <span id="like-count-{{post.id}}">{{post.likes_count}}</span>
+                    {{#if post.userLiked}}
+                        <span>👍</span>
+                    {{/if}}
+                    <button class="reply-btn" type="submit">Comment</button>
+                    {{/if}}
+                </div>
             </div>
         </div>
-    </div>
-{{/each}}
+    {{/each}}
+</div>
 
 <script>
     function likePost(postId) {
