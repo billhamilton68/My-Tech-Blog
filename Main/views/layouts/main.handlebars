@@ -26,8 +26,8 @@
       </nav>
 
       <nav>
-        {{#if logged_in}}
-        <span>{{username}}</span> |
+        {{#if session.logged_in}}
+        <span>{{session.username}}</span> |
         <a href="/profile">Profile</a> |
         <button class="no-button" id="logout">Logout</button>
         {{else}}
@@ -42,7 +42,7 @@
     </footer>
   </div>
 
-  {{#if logged_in}}
+  {{#if session.logged_in}}
   <script src="/js/logout.js"></script>
   {{/if}}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

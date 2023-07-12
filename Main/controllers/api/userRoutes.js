@@ -12,17 +12,36 @@ const withAuth = (req, res, next) => {
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
-    const userData = await User.create(req.body);
+    // Check if the password length is less than 8
+    if (req.body.password.length < 8) {
+      req.flash('errorMessage', 'Password should be at least 8 characters');
+      res.redirect('/signup');
+    } else {
+      const userData = await User.create(req.body);
+  
+      req.session.user_id = userData.id;
+      req.session.logged_in = true;
+      req.session.username = userData.username; // Store username in the session
 
-    req.session.user_id = userData.id;
-    req.session.logged_in = true;
-
-    res.status(200).json(userData);
+      req.session.save(err => {
+        if (err) {
+          res.status(500).json(err);
+        } else {
+         
+          res.redirect('/');
+        }
+      });
+    }
   } catch (err) {
-    res.status(400).json(err);
+    if (err.name === 'SequelizeValidationError') {
+      req.flash('errorMessage', 'Validation error occurred. Please ensure that all fields meet requirements.');
+      res.redirect('/signup');
+    } else {
+      console.log(err);
+      res.status(500).json(err);
+    }
   }
 });
-
 // Login route
 router.post('/login', async (req, res) => {
   try {

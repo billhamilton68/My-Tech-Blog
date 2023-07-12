@@ -51,6 +51,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Adding session to res.locals
+app.use((req, res, next) => {
+  if (req.session) {
+    res.locals.session = req.session;
+  }
+  next();
+});
+
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
