@@ -51,6 +51,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
+
 // Adding session to res.locals
 app.use((req, res, next) => {
   if (req.session) {
@@ -58,6 +63,7 @@ app.use((req, res, next) => {
   }
   next();
 });
+
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
