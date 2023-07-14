@@ -4,15 +4,19 @@ module.exports = {
     return date.toLocaleDateString();
   },
 
-
-truncate: (str, len) => {
-  if (str.length > len && typeof str === "string") {
+  truncate: (str, len) => {
+    if (str.length > len && typeof str === "string") {
       return str.substring(0, len) + "...";
-  } else {
+    } else {
       return str;
+    }
+  },
+
+  gt: (a, b) => {
+    return a > b;
+  },
+
+  eq: (arg1, arg2) => {
+    return arg1 === arg2;
   }
-},
-gt: (a, b) => {
-  return a > b;
-}
 };
