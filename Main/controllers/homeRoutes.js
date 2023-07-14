@@ -46,33 +46,37 @@ router.get('/contact', (req, res) => {
 });
 
 router.get('/posts', withAuth, async (req, res) => {
-    try {
-        const sessionUserId = req.session.user_id;
-  
-      const postData = await Post.findAll({
-        where: {
-          user_id: sessionUserId
-        },
-        include: [
-          {
-            model: User,
-            attributes: ['username'],
-          }
-        ]
-      });
-  
-      const posts = postData.map((post) => post.get({ plain: true }));
-  
-      res.render('posts', { 
-        posts,
-        logged_in: req.session.logged_in,
-        username: req.session.username
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json(err);
-    }
-  });
+  try {
+      const sessionUserId = req.session.user_id;
+
+    const postData = await Post.findAll({
+      where: {
+        user_id: sessionUserId
+      },
+      include: [
+        {
+          model: User,
+          attributes: ['username'],
+        }
+      ]
+    });
+
+    const posts = postData.map((post) => {
+      let postObj = post.get({ plain: true });
+      postObj.username = postObj.user.username;
+      return postObj;
+    });
+
+    res.render('posts', { 
+      posts,
+      logged_in: req.session.logged_in,
+      username: req.session.username
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
 
   router.get('/posts/:id', withAuth, async (req, res) => {
     try {
