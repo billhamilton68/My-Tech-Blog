@@ -58,6 +58,9 @@ router.get('/posts', withAuth, async (req, res) => {
         {
           model: User,
           attributes: ['username'],
+        },
+        {
+          model: Liked,
         }
       ]
     });
@@ -65,11 +68,13 @@ router.get('/posts', withAuth, async (req, res) => {
     const posts = postData.map((post) => {
       let postObj = post.get({ plain: true });
       postObj.username = postObj.user.username;
+      postObj.total_likes = postObj.likeds.length;
       return postObj;
     });
 
     res.render('posts', { 
       posts,
+      hasPosts: posts.length > 0, //Add a variable to know if the user has posts
       logged_in: req.session.logged_in,
       username: req.session.username,
       user_id: req.session.user_id,
