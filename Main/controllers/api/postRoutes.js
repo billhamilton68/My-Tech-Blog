@@ -32,6 +32,7 @@ router.delete('/:id', withAuth, async (req, res) => {
             where: {
                 id: req.params.id,
                 user_id: req.session.user_id,
+
             },
         });
 
@@ -53,6 +54,7 @@ router.put('/:id', withAuth, async (req, res) => {
             where: {
                 id: req.params.id,
                 user_id: req.session.user_id,
+                username: req.session.username,
             },
         });
 
@@ -72,7 +74,8 @@ router.post('/like', withAuth, async (req, res) => {
     try {
       const newLike = await Liked.create({
         user_id: req.session.user_id,
-        post_id: req.body.postId
+        post_id: req.body.postId,
+        username: req.session.username,
       });
       res.json(newLike);
     } catch (err) {

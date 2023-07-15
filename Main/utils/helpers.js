@@ -18,5 +18,9 @@ module.exports = {
 
   eq: (arg1, arg2) => {
     return arg1 === arg2;
-  }
+  },
+
+  log: (value) => {
+    console.log(value);
+  },
 };
