@@ -27,6 +27,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    const updatePostForm = document.querySelector('.edit-post-form');
+    if(updatePostForm) {
+        updatePostForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const postId = this.dataset.postId;
+            const title = document.querySelector('#post-title').value;
+            const content = document.querySelector('#post-content').value;
+
+            try {
+                const response = await fetch(`/api/posts/${postId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: title, content: content }),
+                });
+                if (response.ok) {
+                    alert('Post updated');
+                    location.href = '/posts';  // redirect back to posts page
+                } else {
+                    alert('Failed to update post');
+                }
+            } catch (error) {
+                console.error('Error updating post:', error);
+            }
+        });
+    }
+
     // Delete post event listener
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach(button => {

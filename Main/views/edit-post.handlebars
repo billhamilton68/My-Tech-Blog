@@ -1,0 +1,38 @@
+<div class="container">
+    {{#if logged_in}}
+    <div class="new-post">
+        <h2>Edit a Post</h2>
+        <div class="Edit-post">
+            <h1>{{post.title}}</h1>
+            <p>Author: {{post.user.username}}</p>
+            <p>Posted on {{format_date post.createdAt}}</p>
+            <div class="post-content">
+                <p>{{post.content}}</p>
+            </div>
+            <br>
+            <div>
+                <a href="/">Back to Posts</a>
+            </div>
+        </div>
+        
+        <form class="form edit-post-form" id="edit-post-form" data-post-id="{{post.id}}" action="/api/posts/{{post.id}}" method="POST">
+            <div class="form-group">
+                <label for="post-title">Title:</label>
+                <input class="form-input" type="text" id="post-title" name="title" value="{{post.title}}" required />
+            </div>
+            <div class="form-group">
+                <label for="post-content">Content:</label>
+                <textarea class="form-input" id="post-content" name="content" required>{{post.content}}</textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Update Post</button>
+            </div>
+        </form>
+    </div>
+
+  
+  
+    
+    {{/if}}
+</div>
+<script src="/js/posts.js"></script>

@@ -191,6 +191,42 @@ router.get('/profile', withAuth, async (req, res) => {
   }
 });
 
+router.get('/edit-post/:id', withAuth, async (req, res) => {
+  try {
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          attributes: ['username'],
+        },
+        {
+          model: Liked,
+          attributes: ['id'],
+          where: {
+            user_id: req.session.user_id
+          },
+          required: false
+        }
+      ],
+    });
+
+    if (!postData) {
+      res.status(404).json({ message: 'No post found with this id!' });
+      return;
+    }
+
+    const post = postData.get({ plain: true });
+
+    res.render('edit-post', {
+      post,
+      logged_in: req.session.logged_in
+    });
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
     res.redirect('/');
