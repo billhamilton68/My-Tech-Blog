@@ -1,4 +1,4 @@
- <div id="posts-container">
+<div id="posts-container">
     {{#each posts as |post|}}
         <div class="row mb-4 post">
             <div class="col-md-2">
@@ -22,11 +22,6 @@
                         {{post.content}}
                         {{/if}}
                     </p>
-
-                    <!-- Check if post has comments and provide a link to view comments -->
-                    
-                        
-                 
                 </div>
 
                 <!-- Reply form -->
@@ -40,9 +35,14 @@
                              <button type="submit">Comment</button>
                             </div>
                         </form>
-                        <p>
-                            <a href="/posts/{{post.id}}/comments">View Comments</a>
-                        </p>
+
+                        {{#if post.comments}}
+                            {{#if (gt post.comments.length 0)}}
+                            <p>
+                                <a href="/posts/{{post.id}}/comments">View Comments</a>
+                            </p>
+                            {{/if}}
+                        {{/if}}
                     </div>
                     {{/if}}
 
@@ -79,4 +79,4 @@
             console.error('Error:', error);
         });
     }
-</script> 
+</script>

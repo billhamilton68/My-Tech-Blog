@@ -12,6 +12,9 @@ router.get('/', async (req, res) => {
           attributes: ['username'],
         },
         {
+          model: Comment,  // Add this
+        },
+        {
           model: User,
           as: 'likers',
           attributes: ['id'],
@@ -38,7 +41,6 @@ router.get('/', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 router.get('/posts/:id/comments', withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {
@@ -121,40 +123,43 @@ router.get('/posts', withAuth, async (req, res) => {
   }
 });
 
-  router.get('/posts/:id', withAuth, async (req, res) => {
-    try {
+router.get('/posts/:id', withAuth, async (req, res) => {
+  try {
       const postData = await Post.findByPk(req.params.id, {
-        include: [
-          {
-            model: User,
-            attributes: ['username'],
-          },
-          {
-            model: User,
-            as: 'likers',
-            attributes: ['id'],
-            through: { attributes: [] },
-          }
-        ],
+          include: [
+              {
+                  model: User,
+                  attributes: ['username'],
+              },
+              {
+                  model: User,
+                  as: 'likers',
+                  attributes: ['id'],
+                  through: { attributes: [] },
+              },
+              {
+                  model: Comment, // Include the Comment model
+              },
+          ],
       });
-  
+
       if (!postData) {
-        res.status(404).json({ message: 'No post found with this id!' });
-        return;
+          res.status(404).json({ message: 'No post found with this id!' });
+          return;
       }
-  
+
       const post = postData.get({ plain: true });
       post.userLiked = post.likers.some((liker) => liker.id === req.session.user_id);
-  
+      post.hasComments = post.comments.length > 0; // Add hasComments property
+
       res.render('single-post', {
-        post,
-        logged_in: req.session.logged_in
+          post,
+          logged_in: req.session.logged_in
       });
-    } catch (err) {
+  } catch (err) {
       res.status(500).json(err);
-    }
-  });
-  
+  }
+});
 
 router.post('/api/comments', async (req, res) => {
   try {

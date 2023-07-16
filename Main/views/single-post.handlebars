@@ -26,10 +26,12 @@
         </div>
     </form>
     {{/if}}
-</div>
-<p>
-                            <a href="/posts/{{post.id}}/comments">View Comments</a>
-                        </p>
+        </div>
+                        {{#if post.hasComments}}
+    <p>
+        <a href="/posts/{{post.id}}/comments">View Comments</a>
+    </p>
+{{/if}}
 
 <br>
 <br>

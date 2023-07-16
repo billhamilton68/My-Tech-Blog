@@ -46,7 +46,11 @@ router.post('/login', async (req, res) => {
       where: {
         email: email,
       },
+
+
     });
+
+    
 
     if (!dbUserData) {
       return res.status(400).json({ message: 'No user with that email address!' });
@@ -72,7 +76,9 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Unexpected error occurred', error: err });
   }
+  
 });
+
 // Logout route
 router.post('/logout', (req, res) => {
   if (req.session.logged_in) {
