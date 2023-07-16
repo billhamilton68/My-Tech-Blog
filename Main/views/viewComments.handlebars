@@ -6,12 +6,17 @@
         <p>{{post.content}}</p>
     </div>
 
-    <h2>Comments</h2>
-    <p>Author: {{post.user.username}}</p>
-    <p>Posted on {{format_date post.createdAt}}</p>
-    <div class="post-content">
-        <p>{{post.content}}</p>
-    </div>
+    <div class="comments">
+    <h2>Comments:</h2>
+    {{#each post.comments}}
+        
+        <div class="comment">
+            <p> {{this.content}}</p>
+            <p>Author: {{this.user.username}}</p>
+            <p>Posted on {{this.createdAt}}</p>
+        </div>
+    {{/each}}
+</div>
     
 
     {{#if logged_in}}
