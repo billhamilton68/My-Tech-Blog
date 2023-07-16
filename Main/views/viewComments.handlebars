@@ -5,6 +5,13 @@
     <div class="post-content">
         <p>{{post.content}}</p>
     </div>
+
+    <h2>Comments</h2>
+    <p>Author: {{post.user.username}}</p>
+    <p>Posted on {{format_date post.createdAt}}</p>
+    <div class="post-content">
+        <p>{{post.content}}</p>
+    </div>
     
 
     {{#if logged_in}}
@@ -16,7 +23,7 @@
         {{/if}}
      </div>
 
-     
+
     <form id="reply-form-{{post.id}}" class="reply-form hidden" action="/api/comments" method="POST">
         <input type="hidden" name="post_id" value="{{post.id}}">
         <textarea name="content" placeholder="Thoughts?..."></textarea>
