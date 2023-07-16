@@ -76,6 +76,7 @@ app.use('/', homeRoutes);
 app.use('/api/users', userRoutes); // add user routes
 app.use('/api/posts', postRoutes);
 
+
 // Sync models with the database and start the server
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log(`Now listening on port ${PORT}`));

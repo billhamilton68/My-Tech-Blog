@@ -6,7 +6,9 @@
         <p>{{post.content}}</p>
     </div>
     <br>
-    
+    <div>
+        <a href="/">Back to Posts</a>
+    </div>
 
     {{#if logged_in}}
     <div class="buttons-container">
@@ -24,11 +26,6 @@
     </form>
     {{/if}}
 </div>
-<br>
-<br>
-<div>
-        <a href="/">Back to Posts</a>
- </div>
 
 <script>
     function likePost(postId) {
