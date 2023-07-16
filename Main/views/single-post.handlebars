@@ -15,15 +15,19 @@
         {{#if post.userLiked}}
             <span class="like-icon">👍</span>
         {{/if}}
-        <button class="reply-btn" onclick="showReplyForm('{{post.id}}')">Reply</button>
-    </div>
+     </div>
+
+     
     <form id="reply-form-{{post.id}}" class="reply-form hidden" action="/api/comments" method="POST">
         <input type="hidden" name="post_id" value="{{post.id}}">
         <textarea name="content" placeholder="Thoughts?..."></textarea>
-        <button type="submit">React</button>
+        <div>
+        <button type="submit">Comment</button>
+        </div>
     </form>
     {{/if}}
 </div>
+
 <br>
 <br>
 <div>

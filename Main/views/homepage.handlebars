@@ -1,4 +1,4 @@
-<div id="posts-container">
+ <div id="posts-container">
     {{#each posts as |post|}}
         <div class="row mb-4 post">
             <div class="col-md-2">
@@ -22,29 +22,36 @@
                         {{post.content}}
                         {{/if}}
                     </p>
+
+                    <!-- Check if post has comments and provide a link to view comments -->
+                    
+                        
+                 
                 </div>
 
                 <!-- Reply form -->
-                
-              
-
                 <div class="buttons-container">
-                      {{#if ../logged_in}}
-                <div class="reply-form" >
-                    <form id="reply-form-{{post.id}}" action="/api/comments" method="POST">
-                        <input type="hidden" name="post_id" value="{{post.id}}">
-                        <textarea  name="content" placeholder="Thoughts?..."></textarea>
-                        <button type="submit">Submit</button>
-                    </form>
-                </div>
-                {{/if}}
+                    {{#if ../logged_in}}
+                    <div class="reply-form" >
+                        <form id="reply-form-{{post.id}}" action="/api/comments" method="POST">
+                            <input type="hidden" name="post_id" value="{{post.id}}">
+                            <textarea name="content" placeholder="Thoughts?..."></textarea>
+                            <div>
+                             <button type="submit">Comment</button>
+                            </div>
+                        </form>
+                        <p>
+                            <a href="/posts/{{post.id}}/comments">View Comments</a>
+                        </p>
+                    </div>
+                    {{/if}}
+
                     {{#if ../logged_in}}
                     <button class="like-btn" data-post-id="{{post.id}}" onclick="likePost('{{post.id}}')">Like</button>
                     <span id="like-count-{{post.id}}">{{post.likes_count}}</span>
                     {{#if post.userLiked}}
                         <span>👍</span>
                     {{/if}}
-                   
                     {{/if}}
                 </div>
             </div>
@@ -72,4 +79,4 @@
             console.error('Error:', error);
         });
     }
-</script>
+</script> 

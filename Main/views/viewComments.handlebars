@@ -5,10 +5,7 @@
     <div class="post-content">
         <p>{{post.content}}</p>
     </div>
-    <br>
-    <div>
-        <a href="/">Back to Posts</a>
-    </div>
+    
 
     {{#if logged_in}}
     <div class="buttons-container">
@@ -17,15 +14,23 @@
         {{#if post.userLiked}}
             <span class="like-icon">👍</span>
         {{/if}}
-        <button class="reply-btn" onclick="showReplyForm('{{post.id}}')">Reply</button>
-    </div>
+     </div>
+
+     
     <form id="reply-form-{{post.id}}" class="reply-form hidden" action="/api/comments" method="POST">
         <input type="hidden" name="post_id" value="{{post.id}}">
         <textarea name="content" placeholder="Thoughts?..."></textarea>
-        <button type="submit">React</button>
+        <div>
+        <button type="submit">Comment</button>
+        </div>
     </form>
     {{/if}}
 </div>
+
+<br>
+    <div>
+        <a href="/">Back to Posts</a>
+    </div>
 
 <script>
     function likePost(postId) {
