@@ -163,6 +163,16 @@ router.get('/profile', withAuth, async (req, res) => {
             },
           ],
         },
+        {
+          model: Liked, 
+          attributes: ['id', 'post_id'],
+          include: [ // Add this
+            {
+              model: Post,
+              attributes: ['title', 'content', 'category'] // Specify the fields that you want to display
+            }
+          ]
+        },
       ],
     });
 
@@ -179,6 +189,8 @@ router.get('/profile', withAuth, async (req, res) => {
 
     const formattedDate = format(new Date(user.createdAt), 'MMMM dd, yyyy');
 
+    const likedPosts = user.likeds.map(liked => liked.post); // Map to get liked posts
+
     const profileData = {
       username: user.username,
       email: user.email,
@@ -187,6 +199,7 @@ router.get('/profile', withAuth, async (req, res) => {
       likes_count: totalLikes,
       logged_in: req.session.logged_in,
       username: req.session.username,
+      likedPosts // Update this to pass the liked posts data to the view
     };
 
     res.render('profile', profileData);
@@ -195,7 +208,6 @@ router.get('/profile', withAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 router.get('/edit-post/:id', withAuth, async (req, res) => {
   try {
     const postData = await Post.findByPk(req.params.id, {

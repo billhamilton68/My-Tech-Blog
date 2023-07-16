@@ -1,30 +1,28 @@
 <main class="profile-container">
-        <h1>User Profile</h1>
-        <section class="user-info">
-            <div><strong>Username:</strong> {{username}}</div>
-            <div><strong>Email:</strong> {{email}}</div>
-            <div><strong>Member since:</strong> {{created_at}}</div>
-            <div><strong>Number of posts:</strong> {{posts_count}}</div>
-            <div><strong>Number of likes:</strong> {{likes_count}}</div>
-        </section>
-         <br>
-        <br>
-        <h2>Posts I Liked</h2>
-        <br>
-        <br>
+    <h1>User Profile</h1>
+    <section class="user-info">
+        <div><strong>Username:</strong> {{username}}</div>
+        <div><strong>Email:</strong> {{email}}</div>
+        <div><strong>Member since:</strong> {{created_at}}</div>
+        <div><strong>Number of posts:</strong> {{posts_count}}</div>
+        <div><strong>Number of likes:</strong> {{likes_count}}</div>
+    </section>
+    <br>
+    <br>
+    <h2>Posts I Liked</h2>
+    <br>
+    <br>
     <!-- List of posts -->
     <ul class="posts-list">
-        {{#each posts}}
+        {{#each likedPosts}}
             <li class="post" data-category="{{this.category}}">
                 <h2>{{this.title}}</h2>
-                <p>{{this.content}}</p>
+                <p>{{this.content}}</p> <!-- I've assumed that you want to show the post content, update it as per your need -->
                 <p>Posted by: {{this.username}}</p>
                 <p>Category: {{this.category}}</p>
                 <p>Date: {{dateFormat this.createdAt}}</p>
-                <p>Total Likes: {{this.total_likes}}</p>
                 
             </li>
         {{/each}}
     </ul>
-</div>
 </main>
