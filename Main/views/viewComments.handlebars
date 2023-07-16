@@ -9,56 +9,53 @@
     <div class="comments">
     <h2>Comments:</h2>
     {{#each post.comments}}
-        
         <div class="comment">
-            <p> {{this.content}}</p>
+            <p>{{this.content}}</p>
             <p>Author: {{this.user.username}}</p>
-            <p>Posted on {{this.createdAt}}</p>
+            <p>Posted on {{format_date this.createdAt}}</p>
+            
+            {{#if ../logged_in}}
+            <div class="buttons-container">
+                <button class="like-btn" data-comment-id="{{this.id}}" onclick="likeComment('{{this.id}}')">Like</button>
+                <span id="like-count-{{this.id}}">{{this.likes_count}}</span>
+                {{#if this.userLiked}}
+                    <span class="like-icon">👍</span>
+                {{/if}}
+             </div>
+
+            <form id="reply-form-{{../post.id}}" class="reply-form hidden" action="/api/comments" method="POST">
+    <input type="hidden" name="post_id" value="{{../post.id}}">
+    <textarea name="content" placeholder="Thoughts?..."></textarea>
+    <div>
+        <button type="submit">Comment</button>
+    </div>
+</form>
+            {{/if}}
         </div>
     {{/each}}
-</div>
-    
-
-    {{#if logged_in}}
-    <div class="buttons-container">
-        <button class="like-btn" data-post-id="{{post.id}}" onclick="likePost('{{post.id}}')">Like</button>
-        <span id="like-count-{{post.id}}">{{post.likes_count}}</span>
-        {{#if post.userLiked}}
-            <span class="like-icon">👍</span>
-        {{/if}}
-     </div>
-
-
-    <form id="reply-form-{{post.id}}" class="reply-form hidden" action="/api/comments" method="POST">
-        <input type="hidden" name="post_id" value="{{post.id}}">
-        <textarea name="content" placeholder="Thoughts?..."></textarea>
-        <div>
-        <button type="submit">Comment</button>
-        </div>
-    </form>
-    {{/if}}
+    </div>
 </div>
 
 <br>
-    <div>
-        <a href="/">Back to Posts</a>
-    </div>
+<div>
+    <a href="/">Back to Posts</a>
+</div>
 
 <script>
-    function likePost(postId) {
-    fetch(`/api/posts/like`, {
+function likeComment(commentId) {
+    fetch(`/api/comments/like`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ postId }),
+        body: JSON.stringify({ commentId }),
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error("Something went wrong while liking the post");
+            throw new Error("Something went wrong while liking the comment");
         }
         // add the thumbs up symbol
-        const likeCountSpan = document.querySelector(`#like-count-${postId}`);
+        const likeCountSpan = document.querySelector(`#like-count-${commentId}`);
         const likeIcon = document.createElement('span');
         likeIcon.classList.add('like-icon');
         likeIcon.textContent = '👍';
