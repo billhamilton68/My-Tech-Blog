@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Delete post event listener
+
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach(button => {
         button.addEventListener('click', async function() {

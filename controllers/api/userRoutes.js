@@ -24,7 +24,7 @@ router.post('/signup', async (req, res) => {
       req.session.logged_in = true;
       req.session.username = userData.username; // Store username in the session
 
-      req.flash('successMessage', 'Welcome! ' + userData.username); // Set the welcome flash message here
+      req.flash('successMessage', 'Welcome! ' + userData.username); 
       res.redirect('/');
     });
   } catch (err) {
@@ -90,7 +90,7 @@ router.post('/logout', (req, res) => {
   }
 });
 
-// Update profile route
+
 router.put('/profile', withAuth, async (req, res) => {
   try {
     const { name, email } = req.body;

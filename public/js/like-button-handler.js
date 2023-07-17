@@ -18,7 +18,7 @@ function likePost(postId) {
 
       // Check if the user has already liked the post
       if (data.alreadyLiked) {
-        // Display a message or disable the like button
+       
         likeButton.disabled = true;
         likeButton.textContent = 'Liked';
         likeButton.classList.add('liked');

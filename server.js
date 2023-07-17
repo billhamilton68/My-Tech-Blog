@@ -3,7 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const homeRoutes = require('./controllers/homeRoutes.js');
-const userRoutes = require('./controllers/api/userRoutes'); // import user routes
+const userRoutes = require('./controllers/api/userRoutes'); 
 const postRoutes = require('./controllers/api/postRoutes.js');
 const helpers = require('./utils/helpers');
 const models = require('./models');
@@ -81,7 +81,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', homeRoutes);
-app.use('/api/users', userRoutes); // add user routes
+app.use('/api/users', userRoutes); 
 app.use('/api/posts', postRoutes);
 
 

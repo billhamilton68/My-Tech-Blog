@@ -1,10 +1,10 @@
 module.exports = {
   format_date: (date) => {
     if (date && Object.prototype.toString.call(date) === '[object Date]') {
-        // Format date as MM/DD/YYYY
+      
         return date.toLocaleDateString();
     } else {
-        // Return some default value or throw an error if date is not valid
+        
         return 'Invalid date';
     }
 },
