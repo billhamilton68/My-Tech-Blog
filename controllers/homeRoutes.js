@@ -235,7 +235,7 @@ router.get('/profile', withAuth, async (req, res) => {
     const profileData = {
       username: user.username,
       email: user.email,
-      created_at: formattedDate,
+      createdAt: formattedDate,
       posts_count: user.posts.length,
       likes_count: totalLikes,
       logged_in: req.session.logged_in,

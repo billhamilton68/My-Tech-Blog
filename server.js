@@ -22,7 +22,7 @@ Handlebars.registerHelper('dateFormat', function(value) {
 });
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 // Set up Handlebars.js engine with custom helpers
 const hbs = exphbs.create({
