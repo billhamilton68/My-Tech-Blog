@@ -1,3 +1,4 @@
 web: node server.js
-worker: npm run start-worker
+worker: node seeds/seed.js
+```
 ```
