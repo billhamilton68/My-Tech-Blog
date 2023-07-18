@@ -72,12 +72,13 @@ https://github.com/billhamilton68/My-Tech-Blog.git
 
 ## Hosted
  My-Tech-Blog is hosted on Heroku.com
- Navigate to 
+ Navigate to https://git.heroku.com/mytechblog-bh.git
+ 
 
 ## Main Components:
-Node.js <br/>
-Handlebars.js <br/>
-MySql <br/>
+Node.js 
+Handlebars.js 
+MySql 
 Express
 
 Contribution
