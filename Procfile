@@ -1,2 +1,3 @@
 web: node server.js
-worker: npm run start
+worker: npm run start-worker
+```
