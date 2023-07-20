@@ -72,7 +72,7 @@ https://github.com/billhamilton68/My-Tech-Blog.git
 
 ## Hosted
  My-Tech-Blog is hosted on Heroku.com
- Navigate to https://git.heroku.com/mytechblog-bh.git
+ Navigate to https://mytechblog-bh-b65c7aa94214.herokuapp.com/
  
 
 ## Main Components:
